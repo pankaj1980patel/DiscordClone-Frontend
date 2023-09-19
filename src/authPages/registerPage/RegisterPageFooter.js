@@ -5,37 +5,37 @@ import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@mui/material";
 
 const getFormNotValidMsg = () => {
-    return "Enter correct e-mail address and password should contain aleast of 6 chacracter."
+    return "Enter correct e-mail address, username of atleast 5 character and password should contain aleast of 6 chacracter."
 }
 const getFormValidMsg = () => {
-    return "Press to login"
+    return "Press to register"
 }
 
-const LoginPageFooter = (props) => {
+const RegisterPageFooter = (props) => {
   const navigate = useNavigate();
-  const handlePushToRegisterPage = () => {
-    navigate("/register");
+  const handlePushToLoginPage = () => {
+    navigate("/login");
   };
   return (
     <>
       <Tooltip title={!props.isFormValid ? getFormNotValidMsg() : getFormValidMsg()}>
         <div>
           <CustomPrimaryButton
-            label="LOGIN"
+            label="Register"
             additionalStyles={{ marginTop: "30px" }}
             disable={!props.isFormValid}
-            onClick={props.handleLogin}
+            onClick={props.handleRegister}
           />
         </div>
       </Tooltip>
       <RedirectInfo
-        text="Need an account? "
-        redirectText="Create an account"
+        text=""
+        redirectText="Already have an account?"
         additionalStyles={{ marginTop: "5px" }}
-        redirectHandler={handlePushToRegisterPage}
+        redirectHandler={handlePushToLoginPage}
       />
     </>
   );
 };
 
-export default LoginPageFooter;
+export default RegisterPageFooter;
