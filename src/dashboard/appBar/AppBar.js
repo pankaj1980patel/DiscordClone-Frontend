@@ -1,5 +1,6 @@
 import React from "react";
 import { styled } from "@mui/system";
+import BasicMenu from "./DropDownMenu";
 
 const MainContainer = styled("div")({
   position: "absolute",
@@ -15,7 +16,9 @@ const MainContainer = styled("div")({
   padding: "0 15px",
 });
 const AppBar = (props) => {
-  return <MainContainer></MainContainer>;
+  return <MainContainer>
+    <BasicMenu/>
+  </MainContainer>;
 };
 
 export default AppBar;

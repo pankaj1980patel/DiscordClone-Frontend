@@ -1,5 +1,6 @@
 import React from "react";
 import { styled } from "@mui/system";
+import MainPageButthon from "./MainPageButthon";
 
 const MainContainer = styled("div")({
   width: "72px",
@@ -10,7 +11,9 @@ const MainContainer = styled("div")({
   backgroundColor: "#202225",
 });
 const SideBar = (props) => {
-  return <MainContainer></MainContainer>;
+  return <MainContainer>
+    <MainPageButthon/>
+  </MainContainer>;
 };
 
 export default SideBar;
