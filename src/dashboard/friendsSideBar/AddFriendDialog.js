@@ -10,6 +10,9 @@ import React, { useEffect, useState } from "react";
 import InputWithLabel from "../../shared/components/InputWithLabel";
 import { validateMail } from "../../shared/util/Validators";
 import CustomPrimaryButton from "../../shared/components/CustomPrimaryButton";
+import { getActions } from "../../store/actions/friendsAction";
+import { connect } from "react-redux";
+
 
 const AddFriendDialog = ({
   isDialogOpen,
@@ -19,7 +22,9 @@ const AddFriendDialog = ({
   const [mail, setMail] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const handleSendInvitation = () => {};
+  const handleSendInvitation = () => {
+    sendFriendInvitation({mail},handleCloseDialog)
+  };
   const handleCloseDialog = () => {
     closeDialogHandler();
     setMail("");
@@ -62,4 +67,9 @@ const AddFriendDialog = ({
   );
 };
 
-export default AddFriendDialog;
+const mapActionsToProps = (dispatch) => {
+  return {
+    ...getActions(dispatch)
+  }
+}
+export default connect(null, mapActionsToProps)(AddFriendDialog);

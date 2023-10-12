@@ -8,6 +8,7 @@ import { logout } from "../shared/util/auth";
 import { getActions } from "../store/actions/authActions";
 import { connect } from "react-redux";
 
+import { connectionWithSocketServer } from "../realtimeCommunication/socketConnection";
 const Wrapper = styled('div')({
     width:'100%',
     height:'100vh',
@@ -18,9 +19,13 @@ const Dashboard = ({setUserDetails}) => {
         const userDetails = localStorage.getItem('user');
         if(!userDetails){
             logout();
+        }else{
+            console.log(userDetails)
+            setUserDetails(JSON.parse(userDetails));
+            connectionWithSocketServer(userDetails);
         }
 
-    },[])
+    })
 
     return <Wrapper>
         <SideBar/>

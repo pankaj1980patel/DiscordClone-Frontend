@@ -6,16 +6,19 @@ const apiClient = axios.create({
   timeout: 1000,
 });
 
-apiClient.interceptors.request.use((config) => {
-  const userDetails = localStorage.getItem("user");
-  if (userDetails) {
-    const token = JSON.parse(userDetails).token;
-    config.headers.Authorization = `Bearer ${token}`;
+apiClient.interceptors.request.use(
+  (config) => {
+    const userDetails = localStorage.getItem("user");
+    if (userDetails) {
+      const token = JSON.parse(userDetails).token;
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
   }
-  return config;
-},(err)=>{
-  return Promise.reject(err)
-});
+);
 
 export const login = async (data) => {
   try {
@@ -38,11 +41,48 @@ export const register = async (data) => {
     };
   }
 };
+// secure routes
+export const sendFriendInvitation = async (data) => {
+  try {
+    return await apiClient.post("friend-invitation/invite", data);
+  } catch (error) {
+    checkResponseCode(error);
+    return {
+      error: true,
+      exception: error,
+    };
+  }
+};
 
-const checkResponseCode = (exception) =>{
+export const acceptFriendInvitation = async (data) => {
+  try {
+    return await apiClient.post("friend-invitation/accept", data);
+  } catch (err) {
+    checkResponseCode(err);
+    console.log(err);
+    return {
+      error: true,
+      exception: err,
+    };
+  }
+};
+
+export const rejectFriendInvitation = async (data) => {
+  try {
+    return await apiClient.post("friend-invitation/reject", data);
+  } catch (err) {
+    checkResponseCode(err);
+    console.log(err);
+    return {
+      error: true,
+      exception: err,
+    };
+  }
+};
+
+const checkResponseCode = (exception) => {
   const responseCode = exception?.response?.status;
-  if(responseCode === 401 || responseCode === 403){
+  if (responseCode === 401 || responseCode === 403) {
     logout();
   }
-
-}
+};
