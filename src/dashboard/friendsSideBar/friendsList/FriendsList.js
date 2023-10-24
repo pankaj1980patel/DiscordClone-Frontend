@@ -38,12 +38,12 @@ const checkOnlineUsers = (friends = [], onlineUsers = []) => {
       isOnline: isUserOnline ? true : false,
     };
   });
-  console.log("friends modifiedd", friend);
+  // console.log("friends modifiedd", friend);
   return friend;
 };
 const FriendsList = ({ friends, onlineUsers }) => {
-  console.log("frinends ======================", friends);
-  console.log("onlineUSer ======================", onlineUsers);
+  // console.log("frinends ======================", friends);
+  // console.log("onlineUSer ======================", onlineUsers);
   return (
     <MainContainer>
       {checkOnlineUsers(friends, onlineUsers).map((f) => (

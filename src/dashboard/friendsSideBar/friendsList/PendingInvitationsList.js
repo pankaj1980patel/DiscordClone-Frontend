@@ -36,11 +36,11 @@ const MainContainer = styled("div")({
   overflow: "auto",
 });
 const PendingInvitationsList = ({ pendingFriendsInvitations }) => {
-  console.log("it is before printing", pendingFriendsInvitations);
+  // console.log("it is before printing", pendingFriendsInvitations);
   const pendingFriendsInvitation = pendingFriendsInvitations
     ? pendingFriendsInvitations
     : [];
-  console.log("it is from pending list", pendingFriendsInvitation);
+  // console.log("it is from pending list", pendingFriendsInvitation);
   return (
     <MainContainer>
       {pendingFriendsInvitation.map((invitation) => (
@@ -56,7 +56,7 @@ const PendingInvitationsList = ({ pendingFriendsInvitations }) => {
 };
 
 const mapStoreStateToProps = ({ friends }) => {
-  console.log("Friends State:", friends);
+  // console.log("Friends State:", friends);
 
   return { ...friends };
 };

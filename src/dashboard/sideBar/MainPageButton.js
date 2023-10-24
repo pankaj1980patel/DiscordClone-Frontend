@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import GroupsIcon from "@mui/icons-material/Groups";
 
-const MainPageButthon = (props) => {
+const MainPageButton = (props) => {
   return (
     <Button
       style={{
@@ -22,4 +22,4 @@ const MainPageButthon = (props) => {
   );
 };
 
-export default MainPageButthon;
+export default MainPageButton;
