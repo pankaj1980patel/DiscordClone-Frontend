@@ -8,7 +8,7 @@ const authReducer = (state = initState, action) => {
     case authActions.SET_USER_DETAILS:
       return {
         ...state,
-        userDetails: action.payload, // Access userDetails from action.payload
+        userDetails: action.userDetails, // Access userDetails from action.payload
       };
     default:
       return state;

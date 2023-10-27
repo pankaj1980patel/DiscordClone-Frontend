@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import WelcomeMessage from "./WelcomeMessage";
 import MessageContent from "./MessageContent";
 
-
 const MainContainer = styled("div")({
   flexGrow: 1,
   backgroundColor: "#36393f",
@@ -12,6 +11,7 @@ const MainContainer = styled("div")({
   display: "flex",
 });
 const Messenger = ({ chosenChatDetails }) => {
+  console.log(chosenChatDetails);
   return (
     <MainContainer>
       {!chosenChatDetails ? (
