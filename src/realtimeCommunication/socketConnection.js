@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import * as roomHandler from "./roomHandler";
 import {
   setPendingFriendsInvitations,
   setFriends,
@@ -6,14 +7,25 @@ import {
 } from "../store/actions/friendsAction";
 import store from "../store/store";
 import { updateDirectChatHistoryIfActive } from "../shared/util/chat";
+// import { useEffect, useState } from "react";
 let socket = null;
 export const connectionWithSocketServer = (userDetails) => {
   const jwtToken = JSON.parse(userDetails).token;
-  socket = io("http://localhost:5000", {
-    auth: {
-      token: jwtToken,
-    },
-  });
+  // const [socket, setSocket] = useState(null);
+  // useEffect(() => {
+  //   const newSocket = io("http://localhost:5000", {
+  //     auth: {
+  //       token: jwtToken,
+  //     },
+  //   });
+  //   setSocket(newSocket);
+  // });
+
+  const socket = io("http://localhost:5000", {
+      auth: {
+        token: jwtToken,
+      },
+    });
 
   socket.on("error", (error) => {
     // ...
@@ -41,6 +53,12 @@ export const connectionWithSocketServer = (userDetails) => {
     // console.log("Direct chat history came from server === ", data);
     updateDirectChatHistoryIfActive(data);
   });
+  socket.on("room-create", (data) => {
+    roomHandler.newRoomCreated(data);
+  });
+  socket.on("active-rooms", (data) => {
+    roomHandler.updateActiveRooms(data);
+  });
 };
 
 export const sendDiretMessage = (data) => {
@@ -51,4 +69,17 @@ export const sendDiretMessage = (data) => {
 export const getDirectChatHistory = (data) => {
   // console.log("from getDirectChatHistory == ", data);
   socket.emit("direct-chat-history", data);
+};
+
+export const createNewRoom = () => {
+  socket.emit("room-create");
+};
+
+export const joinRoom = (data) => {
+  socket.emit("room-join", data);
+};
+
+export const leaveRoom = (data) => {
+  console.log("from soketC leaveRoom == ", data);
+  socket.emit("room-leave", data);
 };

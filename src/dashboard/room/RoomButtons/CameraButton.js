@@ -1,0 +1,24 @@
+import React, { useState } from "react";
+import { IconButton } from "@mui/material";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+
+const CameraButton = (props) => {
+  const [cameraEnabled, setCameraEnabled] = useState(true);
+
+  const handleToggleCamera = () => {
+    setCameraEnabled(!cameraEnabled);
+  };
+  return (
+    <IconButton
+      onClick={handleToggleCamera}
+      style={{
+        color: "white",
+      }}
+    >
+      {cameraEnabled ? <VideocamOffIcon /> : <VideocamIcon />}
+    </IconButton>
+  );
+};
+
+export default CameraButton;
