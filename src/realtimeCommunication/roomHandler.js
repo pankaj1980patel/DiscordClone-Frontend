@@ -2,6 +2,7 @@ import {
   setOpenRoom,
   setRoomDetails,
   setActiveRooms,
+  setLocalStream,
 } from "../store/actions/roomActions";
 import store from "../store/store";
 import * as socketConnection from "./socketConnection";
@@ -11,7 +12,8 @@ export const createNewRoom = () => {
     store.dispatch(setOpenRoom(true, true));
     socketConnection.createNewRoom();
   };
-  webRTCHandler.getLocalSteamPreview(false, successCallbackFunc);
+  const audioOnly = store.getState().room.audioOnly;
+  webRTCHandler.getLocalSteamPreview(audioOnly, successCallbackFunc);
 };
 
 export const newRoomCreated = (data) => {
@@ -35,17 +37,28 @@ export const updateActiveRooms = (data) => {
 };
 
 export const joinRoom = (roomId) => {
+  console.log("i am at joinRoom in roomHandler == roodId == ", roomId);
+
   const successCallbackFunc = () => {
     store.dispatch(setRoomDetails({ roomId }));
     store.dispatch(setOpenRoom(false, true));
     socketConnection.joinRoom({ roomId });
   };
-  webRTCHandler.getLocalSteamPreview(false, successCallbackFunc);
+
+  const audioOnly = store.getState().room.audioOnly;
+  webRTCHandler.getLocalSteamPreview(audioOnly, successCallbackFunc);
 };
 
 export const leaveRoom = () => {
   const roomId = store.getState().room.roomDetails.roomId;
-  console.log("from leaveRoom == ", roomId);
+  console.log("leave room roomId == ", roomId);
+  const localStream = store.getState().room.localStreams;
+  if (localStream) {
+    localStream.getTracks().forEach((track) => track.stop());
+    store.dispatch(setLocalStream(null));
+    // webRTCHandler.setLocalStreamThroughWebRTCHandler();
+  }
+  // console.log("from leaveRoom == ", roomId);
   socketConnection.leaveRoom({ roomId: roomId });
   store.dispatch(setRoomDetails(null));
   store.dispatch(setOpenRoom(false, false));

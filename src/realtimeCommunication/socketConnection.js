@@ -7,6 +7,7 @@ import {
 } from "../store/actions/friendsAction";
 import store from "../store/store";
 import { updateDirectChatHistoryIfActive } from "../shared/util/chat";
+import * as webRTCHandler from "./webRTCHandler";
 // import { useEffect, useState } from "react";
 let socket = null;
 export const connectionWithSocketServer = (userDetails) => {
@@ -21,11 +22,11 @@ export const connectionWithSocketServer = (userDetails) => {
   //   setSocket(newSocket);
   // });
 
-  const socket = io("http://localhost:5000", {
-      auth: {
-        token: jwtToken,
-      },
-    });
+  socket = io("http://localhost:5000", {
+    auth: {
+      token: jwtToken,
+    },
+  });
 
   socket.on("error", (error) => {
     // ...
@@ -59,6 +60,16 @@ export const connectionWithSocketServer = (userDetails) => {
   socket.on("active-rooms", (data) => {
     roomHandler.updateActiveRooms(data);
   });
+  socket.on("conn-prepare", (data) => {
+    // console.log("conn -preare", data);
+    const { connUserSocketId } = data;
+    webRTCHandler.prepareNewPeerConnection(connUserSocketId, false);
+    socket.emit("conn-init", { connUserSocketId });
+  });
+  socket.on("conn-init", (data) => {
+    const { connUserSocketId } = data;
+    webRTCHandler.prepareNewPeerConnection(connUserSocketId, true);
+  });
 };
 
 export const sendDiretMessage = (data) => {
@@ -72,14 +83,22 @@ export const getDirectChatHistory = (data) => {
 };
 
 export const createNewRoom = () => {
+  console.log("i am emmiting room-create");
+  console.log("socket == ", socket);
+
   socket.emit("room-create");
 };
 
 export const joinRoom = (data) => {
+  console.log("i got this room-join req == ", data);
   socket.emit("room-join", data);
 };
 
 export const leaveRoom = (data) => {
   console.log("from soketC leaveRoom == ", data);
   socket.emit("room-leave", data);
+};
+
+export const signalPeerData = (data) => {
+  socket.emit("conn-signal", data);
 };
