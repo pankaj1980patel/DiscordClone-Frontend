@@ -40,7 +40,7 @@ export const setActiveRooms = (rooms) => {
 };
 
 export const setLocalStream = (stream) => {
-  console.log("I am at roomActions setLocalStrem")
+  console.log("I am at roomActions setLocalStrem");
   return {
     type: roomActions.SET_LOCAL_STREAM,
     localStream: stream,
@@ -51,5 +51,12 @@ export const setAudioOnly = (audioOnly) => {
   return {
     type: roomActions.SET_AUDIO_ONLY,
     audioOnly,
+  };
+};
+
+export const setRemoteStreams = (remoteStreams) => {
+  return {
+    type: roomActions.SET_REMOTE_STREAM,
+    remoteStreams,
   };
 };

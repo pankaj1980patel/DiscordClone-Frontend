@@ -1,7 +1,7 @@
 import store from "../store/store";
 import Peer from "simple-peer";
-import { setLocalStream } from "../store/actions/roomActions";
-
+import { setLocalStream, setRemoteStreams } from "../store/actions/roomActions";
+import * as socketConnection from "./socketConnection";
 const getConfiguration = () => {
   const turnIceServers = null;
   if (turnIceServers) {
@@ -64,10 +64,54 @@ export const prepareNewPeerConnection = (connUserSocketId, isInitiator) => {
     // TODO
     // pass signaling data to other users
     socketConnection.signalPeerData(signalData);
-
   });
-  peers[connUserSocketId].on("stream", (remoteStream)=> {
-
-  })
+  peers[connUserSocketId].on("stream", (remoteStream) => {
+    // TODO
+    // add new remote stream to our server store
+    console.log("remote stream came from other user");
+    remoteStream.connUserSocketId = connUserSocketId;
+    addNewRemoteStream(remoteStream);
+  });
 };
 
+export const handleSignalingData = (data) => {
+  const { connUserSocketId, signal } = data;
+  if (peers[connUserSocketId]) {
+    peers[connUserSocketId].signal(signal);
+  }
+};
+
+const addNewRemoteStream = (remoteStream) => {
+  const remoteStreams = store.getState().room.remoteStreams;
+  const addNewRemoteStream = [...remoteStreams, remoteStream];
+
+  store.dispatch(setRemoteStreams(addNewRemoteStream));
+};
+
+export const closeAllConnection = () => {
+  Object.entries(peers).forEach((mappedObject) => {
+    const connUserSocketId = mappedObject[0];
+    if (peers[connUserSocketId]) {
+      peers[connUserSocketId].destroy();
+      delete peers[connUserSocketId];
+    }
+  });
+  console.log("no issue from leave room webrtc");
+};
+
+export const handleParticipantLeftRoom = (data) => {
+  const { connUserSocketId } = data;
+
+  if (peers[connUserSocketId]) {
+    peers[connUserSocketId].destroy();
+    delete peers[connUserSocketId];
+  }
+
+  const remoteStreams = store.getState().room.remoteStreams;
+
+  const newRemoteStreams = remoteStreams.filter(
+    (remoteStream) => remoteStream.connUserSocketId !== connUserSocketId
+  );
+
+  store.dispatch(setRemoteStreams(newRemoteStreams));
+};

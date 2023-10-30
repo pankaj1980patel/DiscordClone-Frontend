@@ -24,6 +24,8 @@ export const newRoomCreated = (data) => {
 export const updateActiveRooms = (data) => {
   const { activeRooms } = data;
   const friends = store.getState().friends.friends;
+  console.log("entry from UpdateActiveRooms");
+
   const rooms = [];
 
   activeRooms.forEach((room) => {
@@ -34,6 +36,7 @@ export const updateActiveRooms = (data) => {
     });
   });
   store.dispatch(setActiveRooms(rooms));
+  console.log("from UpdateActiveRooms");
 };
 
 export const joinRoom = (roomId) => {
@@ -58,6 +61,7 @@ export const leaveRoom = () => {
     store.dispatch(setLocalStream(null));
     // webRTCHandler.setLocalStreamThroughWebRTCHandler();
   }
+  webRTCHandler.closeAllConnection();
   // console.log("from leaveRoom == ", roomId);
   socketConnection.leaveRoom({ roomId: roomId });
   store.dispatch(setRoomDetails(null));
