@@ -1,6 +1,6 @@
 import store from "../store/store";
 import Peer from "simple-peer";
-import { setLocalStream } from "../store/actions/roomActions";
+import { setLocalStream, setRemoteStreams } from "../store/actions/roomActions";
 import * as socketConnection from "./socketConnection";
 
 const getConfiguration = () => {
@@ -69,5 +69,23 @@ export const prepareNewPeerConnection = (connUserSocketId, isInitiator) => {
   peers[connUserSocketId].on("stream", (remoteStream) => {
     // TODO
     // add new remote stream to our server store
+    console.log("remote stream came from other");
+    console.log("direct connection is extablished");
+    remoteStream.connUserSocketId = connUserSocketId;
+    addNewRemoteStream(remoteStream);
   });
+};
+
+export const handleSignalingData = (data) => {
+  const { connUserSocketId, signal } = data;
+  if (peers[connUserSocketId]) {
+    peers[connUserSocketId].signal(signal);
+    console.log("signal logic is exchange complete");
+  }
+};
+
+const addNewRemoteStream = (remoteStream) => {
+  const remoteStreams = store.getState().room.remoteStreams;
+  const newRemoteStreams = [...remoteStreams, remoteStream];
+  store.dispatch(setRemoteStreams(newRemoteStreams));
 };

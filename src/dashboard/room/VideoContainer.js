@@ -9,10 +9,15 @@ const MainContainer = styled("div")({
   display: "flex",
   flexWrap: "wrap",
 });
-const VideoContainer = ({localStreams}) => {
-  return <MainContainer>
-    <Video stream={localStreams} isLocalStream={false} />
-  </MainContainer>;
+const VideoContainer = ({ localStreams, remoteStreams }) => {
+  return (
+    <MainContainer>
+      <Video stream={localStreams} isLocalStream={false} />
+      {remoteStreams.map((stream) => (
+        <Video stream={stream} key={stream.id} />
+      ))}
+    </MainContainer>
+  );
 };
 
 const mapStoreStateToProps = ({ room }) => {

@@ -61,7 +61,7 @@ export const connectionWithSocketServer = (userDetails) => {
     roomHandler.updateActiveRooms(data);
   });
   socket.on("conn-prepare", (data) => {
-    // console.log("conn -preare", data);
+    console.log("conn-prepare", data);
     const { connUserSocketId } = data;
     webRTCHandler.prepareNewPeerConnection(connUserSocketId, false);
     socket.emit("conn-init", { connUserSocketId });
@@ -70,6 +70,9 @@ export const connectionWithSocketServer = (userDetails) => {
     const { connUserSocketId } = data;
     webRTCHandler.prepareNewPeerConnection(connUserSocketId, true);
   });
+  socket.on('conn-signal',data => {
+    webRTCHandler.handleSignalingData(data);
+  })
 };
 
 export const sendDiretMessage = (data) => {
