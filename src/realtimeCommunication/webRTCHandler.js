@@ -1,6 +1,7 @@
 import store from "../store/store";
 import Peer from "simple-peer";
 import { setLocalStream } from "../store/actions/roomActions";
+import * as socketConnection from "./socketConnection";
 
 const getConfiguration = () => {
   const turnIceServers = null;
@@ -64,10 +65,9 @@ export const prepareNewPeerConnection = (connUserSocketId, isInitiator) => {
     // TODO
     // pass signaling data to other users
     socketConnection.signalPeerData(signalData);
-
   });
-  peers[connUserSocketId].on("stream", (remoteStream)=> {
-
-  })
+  peers[connUserSocketId].on("stream", (remoteStream) => {
+    // TODO
+    // add new remote stream to our server store
+  });
 };
-
