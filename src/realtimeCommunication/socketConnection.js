@@ -70,9 +70,13 @@ export const connectionWithSocketServer = (userDetails) => {
     const { connUserSocketId } = data;
     webRTCHandler.prepareNewPeerConnection(connUserSocketId, true);
   });
-  socket.on('conn-signal',data => {
+  socket.on("conn-signal", (data) => {
     webRTCHandler.handleSignalingData(data);
-  })
+  });
+  socket.on("room-participant-left", (data) => {
+    console.log("user left the room");
+    webRTCHandler.handleParticipantLeftRoom(data);
+  });
 };
 
 export const sendDiretMessage = (data) => {

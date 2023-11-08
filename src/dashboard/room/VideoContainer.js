@@ -12,10 +12,13 @@ const MainContainer = styled("div")({
 const VideoContainer = ({ localStreams, remoteStreams }) => {
   return (
     <MainContainer>
-      <Video stream={localStreams} isLocalStream={false} />
-      {remoteStreams.map((stream) => (
-        <Video stream={stream} key={stream.id} />
-      ))}
+      <Video stream={localStreams} isLocalStream />
+      {remoteStreams.map((stream) => {
+        if (stream !== null || stream !== {})
+          return <Video stream={stream} key={stream.id} />;
+
+        return <></>;
+      })}
     </MainContainer>
   );
 };
