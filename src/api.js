@@ -2,7 +2,7 @@ import axios from "axios";
 import { logout } from "./shared/util/auth";
 
 const apiClient = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: process.env.REACT_APP_BACKEND_URL,
   timeout: 1000,
 });
 
