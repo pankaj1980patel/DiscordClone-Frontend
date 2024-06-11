@@ -64,10 +64,10 @@ export const setRemoteStreams = (remoteStreams) => {
 };
 
 export const setScreenSharingStream = (stream) => {
+  console.log("hell world pub;ic is good", !!stream);
   return {
     type: roomActions.SET_SCREEN_SHARE_STREAM,
-    isScreenSharingActive: stream ? true : false,
+    isScreenSharingActive: !!stream ? true : false,
     screenSharingStream: stream || null,
   };
 };
-

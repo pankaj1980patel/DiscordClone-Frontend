@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/system";
 import ScreenShareButton from "./RoomButtons/ScreenShareButton";
 import MicButton from "./RoomButtons/MicButton";
@@ -18,6 +18,9 @@ const MainContainer = styled("div")({
   justifyContent: "center",
 });
 const RoomButtons = (props) => {
+  useEffect(() => {
+    console.log("props ", props);
+  }, [props]);
   const { localStreams } = props;
   return (
     <MainContainer>

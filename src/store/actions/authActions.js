@@ -32,7 +32,7 @@ const login = (userDetails, navigator) => {
         localStorage.setItem("user", JSON.stringify(userDetails));
 
         dispatch(setUserDetails(userDetails));
-        navigator("/dispatch");
+        navigator("/dashboard");
       }
     } catch (error) {
       if (error.message === "Timeout") {
@@ -63,7 +63,7 @@ const register = (userDetails, navigator) => {
         localStorage.setItem("user", JSON.stringify(userDetails));
 
         dispatch(setUserDetails(userDetails));
-        navigator("/dispatch");
+        navigator("/dashboard");
       }
     } catch (error) {
       if (error === "Timeout") {

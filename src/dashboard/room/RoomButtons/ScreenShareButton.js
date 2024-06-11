@@ -8,6 +8,7 @@ const constraints = {
   audio: false,
   video: true,
 };
+
 const ScreenShareButton = ({
   localStreams,
   screenSharingStream,
@@ -15,29 +16,27 @@ const ScreenShareButton = ({
   setScreenSharingStream,
 }) => {
   const handleScreenShareToggle = async () => {
-    let stream = null;
-    if (!isScreenSharingActive) {
-      try {
-        stream = await navigator.mediaDevices.getDisplayMedia(constraints);
-      } catch (error) {
-        console.log(
-          "error occured when trying to get access to screen share stream\nerror === ",
-          error
+    try {
+      if (!isScreenSharingActive) {
+        // Start screen sharing
+        const stream = await navigator.mediaDevices.getDisplayMedia(
+          constraints
         );
+        if (stream) {
+          setScreenSharingStream(stream);
+          webRTCHandler.switchOutgoingTracks(stream);
+        }
+      } else {
+        // Stop screen sharing
+        webRTCHandler.switchOutgoingTracks(localStreams);
+        screenSharingStream.getTracks().forEach((track) => track.stop());
+        setScreenSharingStream(null);
       }
-    }
-    if (stream) {
-      console.log("Control is here");
-      setScreenSharingStream(stream);
-      // webRTCHandler.switchOutgoing video tracks
-      webRTCHandler.switchOutgoingTracks(stream);
-    } else {
-      // webRTCHandler.switchOutgoingTracks
-      webRTCHandler.switchOutgoingTracks(localStreams);
-      screenSharingStream.getTrack().forEach((t) => t.stop());
-      setScreenSharingStream(null);
+    } catch (error) {
+      console.error("Error occurred during screen sharing toggle:", error);
     }
   };
+
   return (
     <IconButton
       onClick={handleScreenShareToggle}
