@@ -22,7 +22,7 @@ export const connectionWithSocketServer = (userDetails) => {
   //   setSocket(newSocket);
   // });
 
-  socket = io("http://localhost:5000", {
+  socket = io("https://discordclone-frontend.onrender.com", {
     auth: {
       token: jwtToken,
     },
